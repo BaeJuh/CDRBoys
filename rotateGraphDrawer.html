@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+
+<head>
+
+</head>
+
+<body>
+	<label>
+		x : <input id="x1" class="setX" type="number">
+	</label>
+	<label>
+		y : <input id="y1" class="setY" type="number">
+	</label>
+	<br>
+	<label>
+		x : <input id="x2" class="setX" type="number">
+	</label>
+	<label>
+		y : <input id="y2" class="setY" type="number">
+	</label>
+	<br>
+	<button id="drawButton">Draw</button>
+	<br>
+	<label>
+		Degree : <input id="degree" type="number">
+	</label>
+	<br>
+	<button id="rotateButton">Rotate</button>
+	<br>
+	<canvas id="canvas" width="500" height="500" style="border: 1px solid tomato">
+	<br>
+	<button id="clearButton">Clear Canvas</button>
+		<script>
+			const canvas = document.getElementById("canvas");
+			const pen = canvas.getContext("2d");
+
+			const scale = 25;
+
+			const printDot = (x, y) => { pen.fillRect(x, y, 1, 1); }
+			const modiDot = (x, y) => { printDot(canvas.width / 2 + x * scale, canvas.height / 2 - y * scale); }
+			const crosshair = () => {
+				for (let i = 0; i < canvas.width; i++) {
+					printDot(i, canvas.height / 2);
+				}
+				for (let i = 0; i < canvas.height; i++) {
+					printDot(canvas.width / 2, i);
+				}
+			}
+			crosshair();
+			const drawRatio = () => {
+				for (let i = 1; i < canvas.width / scale; i++) {
+					for (let j = -5; j <= 5; j++) {
+						printDot(i * scale, canvas.height / 2 - j);
+					}
+				}
+				for (let i = 1; i < canvas.height / scale; i++) {
+					for (let j = -5; j <= 5; j++) {
+						printDot(j + canvas.width / 2, i * scale);
+					}
+				}
+			}
+			drawRatio();
+
+			const drawLine = (x1, y1, x2, y2, dir) => {
+				if (x1 > x2) {
+					for (let i = x2; i <= x1; i += 1 / scale) {
+						const f = ((y1 - y2) / (x1 - x2)) * (i - x1) + (y1);
+						//modiDot(i, f);
+						const [posX, posY] = transitionPos( i, f, dir );
+						modiDot( posX, posY );
+					}
+				} else {
+					for (let i = x1; i <= x2; i += 1 / scale) {
+						const f = ((y1 - y2) / (x1 - x2)) * (i - x1) + (y1);
+						//modiDot(i, f);
+						const [posX, posY] = transitionPos( i, f, dir );
+						modiDot( posX, posY );
+					}
+				}
+			}
+
+			const transitionPos = (x, y, axis) => {
+				const pos = [[x], [y], [1]];
+
+				const result = [];
+
+				for (let i = 0; i < axis.length; i++) {
+					result[i] = [];
+					for (let j = 0; j < pos[i].length; j++) {
+						result[i][j] = 0;
+						for (let k = 0; k < axis[i].length; k++) {
+							result[i][j] += axis[i][k] * pos[k][j];
+						}
+					}
+				}
+				return [result[0][0], result[1][0]];
+
+			}
+			const runButton = ( dir ) => {
+				//pen.fillStyle = "black";
+				//pen.clearRect(0, 0, canvas.width, canvas.height);
+				const setX = document.querySelectorAll(".setX");
+				const setY = document.querySelectorAll(".setY");
+
+				const xQ = new Queue("xQ");
+				const yQ = new Queue("yQ");
+
+				setX.forEach((x) => {
+					xQ.append(Number(x.value));
+				});
+				setY.forEach((y) => {
+					yQ.append(Number(y.value));
+				});
+
+				if (xQ.size === yQ.size) {
+					// 실 작동문
+					const count = xQ.size;
+					for (let i = 0; i < count - 1; i++) {
+						//if (i % 2 === 0) { pen.fillStyle = "red"; }
+						//else { pen.fillStyle = "blue"; }
+						drawLine(xQ.shift(), yQ.shift(), xQ.getFirstNode(), yQ.getFirstNode(), dir);
+					}
+				} else {
+					alert("죄송합니다 망가졌나봐요.");
+				}
+
+				pen.fillStyle = "black";
+				crosshair();
+				drawRatio();
+			}
+
+			const drawButton = document.getElementById("drawButton");
+			const rotateButton = document.getElementById("rotateButton");
+			drawButton.addEventListener("click", () => {
+				pen.fillStyle = "blue";
+				dir = [
+					[1, 0, 0],
+					[0, 1, 0],
+					[0, 0, 1]
+				];
+				runButton(dir);
+			});
+			rotateButton.addEventListener("click", () => {
+				pen.fillStyle = "red";
+				const degree = Number(document.getElementById("degree").value);
+				//console.log(degree);
+				const radian = (degree * Math.PI) / 180;
+				//console.log(radian);
+				dir = [
+					[Math.cos( radian ), Math.sin( radian ), 0],
+					[-Math.sin( radian ), Math.cos( radian ), 0],
+					[0, 0, 1]
+				];
+				runButton(dir);
+			});
+
+			const clearButton = document.getElementById("clearButton");
+			clearButton.addEventListener("click", () => {
+				pen.clearRect(0, 0, canvas.width, canvas.height);
+				crosshair();
+				drawRatio();
+			})
+
+			class Queue {
+				constructor(id) {
+					this.id = id;
+					this.storage = [];
+					this._size = 0;
+				}
+				append(value) {
+					this.storage.push(value);
+					this._size++;
+				}
+				shift() {
+					this._size--;
+					return this.storage.shift();
+				}
+				get size() {
+					return this._size;
+				}
+				getFirstNode() {
+					return this.storage[0];
+				}
+			}
+
+		</script>
+</body>
+
+</html>

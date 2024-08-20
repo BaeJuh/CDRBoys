@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class SingleLinkedList {
+            constructor( id ) {
+                this.id = id;
+                this.head = null;
+                this.tail = null;
+
+                this.size = 0;
+            }
+            insert( Node ) {
+                if ( size === 0 ) {
+                    this.head = Node;
+                    this.tail = Node;
+                    Node.next = null;
+                } else {
+                    const temp = this.tail;
+                    this.tail.next = Node;
+                    this.tail = Node;
+                    Node.next = null;
+                }
+
+                size++;
+            }
+        }
+
+        class Node {
+            constructor( value ) {
+                this.value = value;
+                this._next = null;
+                // this.prev = null;
+            }
+            set next( nextNode ) {
+                this._next = nextNode;
+            }
+        }
+
+        class Queue {
+            constructor( id ) {
+                this.id = id;
+                this.storage = null;
+                this.size = 0;
+            }
+            setStorage() {
+                this.storage = new SingleLinkedList("Queue");
+            }
+            push( Node ) {
+                this.storage.insert( Node );
+            }
+            getSize() {
+                this.size = this.setStorage.size;
+                return this.size;
+            }
+        }
+
+        const queue = new Queue("queue");
+        const node = N
+
+    </script>
+</body>
+</html>

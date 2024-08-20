@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph</title>
+    <style>
+        * { padding: 0; margin: 0; }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas" width="1050" height="1050" style="border: 1px solid tomato"></canvas>
+
+    <script>
+        const scoreData = [77, 55, 89, 51, 49, 55, 80, 65, 87, 83];
+
+        const sortedData = [...scoreData].sort((a, b) => a - b);
+
+        const sum = (arr) => {
+            let result = 0;
+
+            arr.forEach((v) => {
+                result += v;
+            });
+
+            return result;
+        }
+
+        const counter = (arr) => {
+            let count = 0;
+
+            arr.forEach((v) => {
+                count++;
+            });
+
+            return count;
+        }
+
+        const average = (arr) => {  // 평균
+            return sum(arr) / counter(arr);
+        }
+
+        const mode = (arr) => { // 최빈값
+            let moder = {};
+
+            arr.forEach((v) => {
+                if (v in moder) {
+                    moder[v] += 1;
+                } else {
+                    moder[v] = 1;
+                }
+            });
+
+            let result = 0;
+            let temp = 0;
+            for (key in moder) {
+                if (moder[key] > temp) {
+                    result = key;
+                    temp = moder[key];
+                }
+            }
+            return result;
+        }
+
+        const median = (arr) => {
+            let count = counter(arr);
+            let copyArr = [...arr].sort((a,b) => a-b);
+            const frontStack = [];
+            const backStack = [];
+            for (let i = 0; i < count / 2 - 1; i++) {
+                frontStack.push(copyArr.shift());
+                backStack.push(copyArr.pop());
+            }
+
+            console.log(copyArr.length);
+            count = counter(copyArr)
+
+            if (count == 1) {
+                return copyArr[0];
+            } else {
+                return (frontStack.pop() + backStack.pop()) / 2;
+            }
+
+
+        }
+
+        const max = (arr) => {
+            let max = 0;
+            arr.forEach((v) => {
+                if (v > max) {
+                    max = v;
+                }
+            });
+            return max;
+        }
+
+        const min = (arr) => {
+            let min = max(arr);
+            arr.forEach((v) => {
+                if (v < min) {
+                    min = v;
+                }
+            });
+
+            return min;
+        }
+
+        let r = mode(sortedData);
+        document.write(`<br>`);
+        document.write(`평균 : ${average(sortedData)} <br>`);
+        document.write(`최빈값 : ${mode(sortedData)} <br>`);
+        document.write(`최소값 : ${min(sortedData)} <br>`);
+        document.write(`최대값 : ${max(sortedData)} <br>`);
+        document.write(`중위값 : ${median(sortedData)} <br>`);
+
+        const canvas = document.getElementById("canvas");
+        const pen = canvas.getContext("2d");
+        const xScale = 100;
+        const yScale = 10;
+
+        const printDot = ( x, y ) => {
+            pen.fillRect( x, y, 1, 1 );
+        }
+        const modiDot = ( x, y ) => {
+            printDot( x*xScale, canvas.height - y*yScale );
+        }
+
+        const makeGraph = ( arr ) => {
+            arr.forEach( (value, index, array) => {
+                modiDot( (index + 1), value ); // x = index + 1, y = value;
+                for ( let i=index+1; i< (index+2); i=i+1/xScale) { 
+                    const f = (( array[index+1] - array[index] )/( 1 )) * ( i - (index+1)) + value;
+                    modiDot( i, f );
+                }
+            });
+        }
+        const makeHorizon = ( arr ) => {
+            const maxValue = max( arr );
+            const minValue = min( arr );
+            const medianValue = median( arr );
+            const averageValue = average( arr );
+            
+            pen.fillStyle = "blue";
+            for ( let i=0; i < canvas.width; i=i+1/xScale ) {
+                modiDot( i, maxValue );
+            }
+            
+            pen.fillStyle = "red";
+            for ( let i=0; i < canvas.width; i=i+1/xScale ) {
+                modiDot( i, minValue );
+            }
+
+            pen.fillStyle = "pink";
+            for ( let i=0; i < canvas.width; i=i+1/xScale ) {
+                modiDot( i, medianValue );
+            }
+
+            pen.fillStyle = "gold";
+            for ( let i=0; i < canvas.width; i=i+1/xScale ) {
+                modiDot( i, averageValue );
+            }
+        }
+
+        const makeVertical = ( arr ) => {
+            const modeValue = mode( arr );
+            arr.forEach( (value, index) => {
+                if ( value == modeValue ) {
+                    pen.fillStyle = "green";
+                } else {
+                    pen.fillStyle = "black";
+                }
+                for( let i=0; i<value; i=i+1/yScale ) {
+                    modiDot(  index+1 ,i );
+                }
+            });
+        }
+        makeGraph( scoreData );
+        makeHorizon( scoreData );
+        makeVertical( scoreData );
+
+    </script>
+</body>
+
+</html>

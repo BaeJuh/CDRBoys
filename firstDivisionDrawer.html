@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+
+<head>
+
+</head>
+
+<body>
+	<label>
+		x : <input id="x1" class="setX" type="number">
+	</label>
+	<label>
+		y : <input id="y1" class="setY" type="number">
+	</label>
+	<br>
+	<label>
+		x : <input id="x2" class="setX" type="number">
+	</label>
+	<label>
+		y : <input id="y2" class="setY" type="number">
+	</label>
+	<br>
+	<label>
+		x : <input id="x3" class="setX" type="number">
+	</label>
+	<label>
+		y : <input id="y3" class="setY" type="number">
+	</label>
+	<br>
+	<button id="drawButton">Draw</button>
+	<br>
+	<canvas id="canvas" width="500" height="500" style="border: 1px solid tomato">
+		<script>
+			const canvas = document.getElementById("canvas");
+			const pen = canvas.getContext("2d");
+
+			const scale = 25;
+
+			const printDot = (x, y) => { pen.fillRect(x, y, 1, 1); }
+			const modiDot = (x, y) => { printDot(canvas.width / 2 + x * scale, canvas.height / 2 - y * scale); }
+			const crosshair = () => {
+				for (let i = 0; i < canvas.width; i++) {
+					printDot(i, canvas.height / 2);
+				}
+				for (let i = 0; i < canvas.height; i++) {
+					printDot(canvas.width / 2, i);
+				}
+			}
+			crosshair();
+			const drawRatio = () => {
+				for (let i = 1; i < canvas.width / scale; i++) {
+					for (let j = -5; j <= 5; j++) {
+						printDot(i * scale, canvas.height / 2 - j);
+					}
+				}
+				for (let i = 1; i < canvas.height / scale; i++) {
+					for (let j = -5; j <= 5; j++) {
+						printDot(j + canvas.width / 2, i * scale);
+					}
+				}
+			}
+			drawRatio();
+
+			const drawLine = (x1, y1, x2, y2) => {
+				if (x1 > x2) {
+					for (let i = x2; i <= x1; i += 1 / scale) {
+						const f = ((y1 - y2) / (x1 - x2)) * (i - x1) + (y1);
+						modiDot(i, f);
+					}
+				} else {
+					for (let i = x1; i <= x2; i += 1 / scale) {
+						const f = ((y1 - y2) / (x1 - x2)) * (i - x1) + (y1);
+						modiDot(i, f);
+					}
+				}
+			}
+
+			const drawButton = document.getElementById("drawButton");
+			drawButton.addEventListener("click", () => {
+				pen.fillStyle = "black";
+				pen.clearRect(0, 0, canvas.width, canvas.height);
+				crosshair();
+				drawRatio();
+
+				//const x1 = document.getElementById("x1").value;
+				//const y1 = document.getElementById("y1").value;
+				//const x2 = document.getElementById("x2").value;
+				//const y2 = document.getElementById("y2").value;
+				//const x3 = document.getElementById("x3").value;
+				//const y3 = document.getElementById("y3").value;
+
+				const setX = document.querySelectorAll(".setX");
+				const setY = document.querySelectorAll(".setY");
+				
+				const xQ = new Queue("xQ");
+				const yQ = new Queue("yQ");
+
+				setX.forEach( (x) => {
+					xQ.append( Number(x.value) );
+				});
+				setY.forEach( (y)=> {
+					yQ.append( Number(y.value) );
+				});
+				
+				if ( xQ.size === yQ.size ) {
+					// 실 작동문
+					const count = xQ.size;
+					for ( let i=0; i<count-1; i++ ) {
+						if ( i%2===0 ) { pen.fillStyle="red"; }
+						else { pen.fillStyle="blue"; }
+						console.log(i);
+						drawLine( xQ.shift(), yQ.shift(), xQ.getFirstNode(), yQ.getFirstNode() );
+					}
+				}
+				`
+				pen.fillStyle = "red";
+				drawLine(Number(x1), Number(y1), Number(x2), Number(y2));
+				pen.fillStyle = "blue";
+				drawLine(Number(x2), Number(y2), Number(x3), Number(y3));
+				`
+			});
+			class Queue {
+				constructor(id) {
+					this.id = id;
+					this.storage = [];
+					this._size = 0;
+				}
+				append(value) {
+					this.storage.push(value);
+					this._size ++;
+				}
+				shift() {
+					this._size --;
+					return this.storage.shift();
+				}
+				get size () {
+					return this._size;
+				}
+				getFirstNode() {
+					return this.storage[0];
+				}
+			}
+
+		</script>
+</body>
+
+</html>

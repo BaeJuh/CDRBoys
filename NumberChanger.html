@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <select id="select">
+        <option value="bin">2진수</option>
+        <option value="oct">8진수</option>
+        <option value="dec">10진수</option>
+        <option value="hex">16진수</option>
+    </select>
+    <input id="numberInput" type="text">
+    <button id="change">Change</button>
+    <div id="resultArea"></div>
+    <numberChanger></numberChanger>
+
+    <script>
+        class NumberChanger {
+            constructor(id) {
+                this.id = id;
+
+                this.decimal = 0;
+                this.binary = "";
+                this.octal = "";
+                this.hexadecimal = "";
+                this.hexAlphabet = {
+                    "A": 10,
+                    "B": 11,
+                    "C": 12,
+                    "D": 13,
+                    "E": 14,
+                    "F": 15
+                };
+
+                // DOM Element
+                this.select = null;
+                this.numberInput = null;
+                this.changeButton = null;
+                this.resultArea = null;
+            }
+
+            setElement() {
+                this.select = document.getElementById("select");
+                this.numberInput = document.getElementById("numberInput");
+                this.changeButton = document.getElementById("change");
+                this.resultArea = document.getElementById("resultArea");
+            }
+
+            makeDecimal(value = "", type = 10) {
+                let result = 0;
+                for (let i = 0; i < value.length; i++) {
+                    if (value[i].toUpperCase() in this.hexAlphabet && type == 16) {
+                        result += this.hexAlphabet[value[i].toUpperCase()] * (type ** (value.length - 1 - i));
+                    } else {
+                        result += Number(value[i]) * (type ** (value.length - 1 - i));
+                    }
+                }
+                this.decimal = result;
+            }
+
+            makeNotDecimal(value, type) {
+                let result = "";
+                while (value >= 1) {
+                    let digit = value % type;
+                    if ( digit>=10 && type === 16 ) {
+                        for ( let key in this.hexAlphabet ) {
+                            if ( this.hexAlphabet[key] === digit ) {
+                                digit = key;
+                                console.log(this.hexAlphabet[key]);
+                                break;
+                            }
+                        }
+                    }
+                    result = digit + result;
+                    value = Math.floor(value / type);
+                }
+                return result;
+            }
+
+            selectType() {
+                switch (this.select.value) {
+                    case "bin":
+                        this.makeDecimal(this.numberInput.value, 2);
+                        break;
+                    case "oct":
+                        this.makeDecimal(this.numberInput.value, 8);
+                        break;
+                    case "hex":
+                        this.makeDecimal(this.numberInput.value, 16);
+                        break;
+                    default:
+                        this.makeDecimal(this.numberInput.value, 10);
+                }
+                this.binary = this.makeNotDecimal(this.decimal, 2);
+                this.octal = this.makeNotDecimal(this.decimal, 8);
+                this.hexadecimal = this.makeNotDecimal(this.decimal, 16);
+            }
+
+            runNumberChanger() {
+                this.setElement();
+                this.changeButton.addEventListener("click", () => {
+                    this.selectType();
+
+                    this.resultArea.innerHTML = `
+                        <p>2진수 : ${this.binary}</p>
+                        <p>8진수 : ${this.octal}</p>
+                        <p>10진수 : ${this.decimal}</p>
+                        <p>16진수 : ${this.hexadecimal}</p>
+                    `;
+                });
+
+            }
+        }
+
+        const numberChanger = new NumberChanger("numberChanger");
+        numberChanger.runNumberChanger();
+    </script>
+</body>
+
+</html>
