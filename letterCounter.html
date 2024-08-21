@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>letter Counter</title>
+</head>
+<body>
+    
+    <script>
+        class letterCounter {
+            constructor ( id ) {
+                this.id = id;
+                this.string = "";
+                this.result = {};
+            }
+            
+            inputString( string ) {
+                this.string = string;
+            }
+            
+            count() {
+                class Queue {
+                    constructor () {
+                        this.storage = [];
+                    }
+                    insert( value ) {
+                        this.storage.push( value );
+                    }
+                    output() {
+                        return this.storage.shift();
+                    }
+                    getSize() {
+                        return this.storage.length;
+                    }
+                }
+
+                const queue = new Queue();
+                for ( let i=0; i < this.string.length; i++ ) {
+                    queue.insert( this.string[i] );
+                }
+
+                const count = queue.getSize();
+                for ( let i=0; i<count; i++ ) {
+                    const letter = queue.output();
+                    if ( " ?!.,".indexOf( letter ) !== -1 ) { continue; }
+                    if ( letter in this.result ) {
+                        this.result[letter] ++;
+                    } else {
+                        this.result[letter] = 1;
+                    }
+                    
+                }
+                console.log( this.result );
+            }
+
+            printResult() {
+                for ( const letter in this.result ) {
+                    document.write( `${letter} : ${this.result[letter]} 개<br>` )
+                }
+            }
+
+            run( string ) {
+                this.inputString( string );
+                this.count();
+                this.printResult();
+            }
+        }
+
+        const letters = new letterCounter("letterCounter");
+        letters.run( "Nullam et pretium metus, nec vehicula ipsum. Morbi sit amet purus accumsan, dapibus elit non, cursus lorem. Ut et augue sagittis, euismod erat id, posuere justo. Sed gravida maximus sem ut dignissim. Donec eget feugiat elit, efficitur commodo felis. Phasellus nec lobortis nunc, et varius orci. Pellentesque est quam, ultrices non ex nec, gravida faucibus purus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec sit amet diam dapibus, efficitur sapien vitae, lacinia orci. Vivamus consectetur nulla at sapien suscipit, nec viverra urna bibendum. Maecenas a auctor nibh. Mauris in eros vestibulum, tincidunt mi et, congue leo. Donec tempor lacus sed ex dictum, eget elementum mauris posuere. Nulla facilisi. Cras eget odio eu ligula auctor dignissim. Morbi nec diam feugiat risus euismod pulvinar ut eu sem." );
+    </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Checker</title>
+</head>
+<body>
+    <script>
+
+        class NumberChecker {
+            constructor ( id ) {
+                this.id = id;
+                this.data = "";
+                this.result = {}
+            }
+
+            setData ( data ) {
+                this.data = data;
+            }
+
+            evenOddCheck() {
+                class Queue {
+                    constructor (id) {
+                        this.id = id;
+                        this.storage = [];
+                    }
+                    insert( value ) {
+                        this.storage.push( value );
+                    }
+                    output() {
+                        return this.storage.pop();
+                    }
+                    getSize() {
+                        let count = 0;
+                        this.storage.forEach( ()=>{
+                            count++;
+                        });
+                        return count;
+                    }
+                }
+                const result = {
+                    even: new Queue("even"),
+                    odd: new Queue("odd")
+                };
+
+                for ( let i=0; i<this.data.length; i++ ) {
+                    const number = Number(this.data[i]);
+                    if ( number % 2 === 0 ) {
+                        result.even.insert( number );
+                    } else {
+                        result.odd.insert( number )
+                    }
+                }
+
+                this.result = result;
+            }
+
+            displayResult () {
+                document.write(`
+                짝수는 ${this.result.even.getSize()}개 이고,<br>
+                홀수는 ${this.result.odd.getSize()}개 입니다.
+                `)
+            }
+
+            run( data ) {
+                this.setData( data );
+                this.evenOddCheck();
+                this.displayResult();
+                console.log( this.result );
+            }
+
+        }
+        data = "1687437654186432487432165763165";
+
+        const checker = new NumberChecker("chk");
+        checker.run( data );
+    </script>
+</body>
+</html>

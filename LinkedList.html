@@ -6,6 +6,9 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="targetDoM">
+
+    </div>
     <script>
         class SingleLinkedList {
             constructor( id ) {
@@ -88,27 +91,50 @@
             }
             displayNodes() {
                 this.storage.getIndex();
+                //`<div id="${id}" style=" width: 200px; height: 200px; border: 1px solid black;">${val}<div>`;
+                let current = this.storage.head;
+                const target = document.getElementById("targetDoM");
+                const dom = `<div id="${current.value}" style=" width: 100px; height: 100px; border: 1px solid black; display: inline-block;">
+                            ${current.value}
+                        </div>
+                        -->`;
+                target.innerHTML = dom;
+                console.log( current.next );
+                while ( current.next !== null ) {
+                    current = current.next;
+                    target.innerHTML += `
+                        <div id="${current.value}" style=" width: 100px; height: 100px; border: 1px solid black; display: inline-block;">
+                            ${current.value}
+                        </div>
+                        -->
+                        `;
+                        
+                }
             }
         }
 
         const main = (() => {
             const queue = new Queue("queue");
             queue.setStorage();
-            const node1 = new Node(1);
-            const node2 = new Node(2);
-            const node3 = new Node(3);
-            const node4 = new Node(4);
+            const node1 = new Node("초지");
+            const node2 = new Node("고잔");
+            const node3 = new Node("중앙");
+            const node4 = new Node("한대앞");
+            const node5 = new Node("상록수");
 
             queue.push( node1 );
             queue.push( node2 );
             queue.push( node3 );
             queue.push( node4 );
+            queue.push( node5 );
 
             queue.displayNodes();
             //console.log( queue.shift() );
             //console.log( queue.shift() );
             //console.log( queue.shift() );
             //console.log( queue.shift() );
+            //`<div id="${id}" style=" width: 200px; height: 200px; border: 1px solid black;">${val}<div>`;
+            
         })();
 
     </script>
