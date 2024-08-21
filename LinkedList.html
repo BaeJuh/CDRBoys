@@ -16,7 +16,7 @@
                 this.size = 0;
             }
             insert( Node ) {
-                if ( size === 0 ) {
+                if ( this.size === 0 ) {
                     this.head = Node;
                     this.tail = Node;
                     Node.next = null;
@@ -27,7 +27,29 @@
                     Node.next = null;
                 }
 
-                size++;
+                this.size++;
+                //console.log(  )
+            }
+            output() {
+                if ( this.size > 0 ) {
+                    let temp = this.head;
+                    if ( this.head === this.tail ) {
+                        this.head = null;
+                        this.tail = null;
+                    } else {
+                        this.head = this.head.next;
+                    }
+                    this.size--;
+                    return temp;
+                }
+            }
+            getIndex() {
+                let current = this.head;
+                console.log( current );
+                while ( current !== this.tail ) {
+                    current = current.next;
+                    console.log( current );
+                }
             }
         }
 
@@ -39,6 +61,9 @@
             }
             set next( nextNode ) {
                 this._next = nextNode;
+            }
+            get next() {
+                return this._next;
             }
         }
 
@@ -54,14 +79,37 @@
             push( Node ) {
                 this.storage.insert( Node );
             }
+            shift(  ) {
+                return this.storage.output();
+            }
             getSize() {
                 this.size = this.setStorage.size;
                 return this.size;
             }
+            displayNodes() {
+                this.storage.getIndex();
+            }
         }
 
-        const queue = new Queue("queue");
-        const node = N
+        const main = (() => {
+            const queue = new Queue("queue");
+            queue.setStorage();
+            const node1 = new Node(1);
+            const node2 = new Node(2);
+            const node3 = new Node(3);
+            const node4 = new Node(4);
+
+            queue.push( node1 );
+            queue.push( node2 );
+            queue.push( node3 );
+            queue.push( node4 );
+
+            queue.displayNodes();
+            //console.log( queue.shift() );
+            //console.log( queue.shift() );
+            //console.log( queue.shift() );
+            //console.log( queue.shift() );
+        })();
 
     </script>
 </body>
