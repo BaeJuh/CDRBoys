@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const firArr = [1, 2, 3, 4, 5, 6, 7];
+        const secArr = [7, 6, 5, 4, 3, 2, 1];
+
+        class Cross {
+            constructor( id ) {
+                this.id = id;
+            }
+            
+            getCrossSum(fir, sec) {
+                if ( fir.length !== sec.length ) { return "error"; }
+                class Deque {
+                    constructor ( id ) {
+                        this.id = id;
+                        this.data = [];
+                    }
+                    pushData( value ) {
+                        this.data.push( value );
+                    }
+                    unshiftData( value ) {
+                        this.data.unshift( value );
+                    }
+                    popData() {
+                        return this.data.pop();
+                    }
+                    shiftData() {
+                        return this.data.shift();
+                    }
+                }
+                const firDeq = new Deque("fir"); // queue
+                const secDeq = new Deque("sec"); // stack
+                for ( let i=0; i<fir.length; i++) {
+                    firDeq.pushData( fir[i] );
+                    secDeq.pushData( sec[i] );
+                }
+                const result = [];
+
+                for ( let i=0; i<fir.length; i++ ) {
+                    result[i] = ( firDeq.shiftData() + secDeq.popData() );
+                    console.log( result[i] );
+                }
+                return result;
+            }
+        }
+
+        const cross = new Cross("main");
+        document.write( cross.getCrossSum( firArr, secArr ) );
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const arr = [
+            [1, 2, 3, 4, 5],
+            [1, 2, 3, 4, 5],
+            [1, 2, 3, 4, 5],
+            [1, 2, 3, 4, 5],
+            [1, 2, 3, 4, 5]
+        ];
+        const result = [];
+        const row = arr.length;
+        const col = arr[0].length;
+        let maxLen = 0;
+        arr.forEach( (v)=>{
+            maxLen = v.length > maxLen ? v.length:maxLen;
+        });
+
+        let pos = 0;
+        for (let i = 0; i < (10); i++) {
+            let temp = 0;
+            pos = pos < row ? pos+1 : pos;
+            for (let i = 0; i < pos; i++) {
+                if ( arr[i].length > 0 ) {
+                    temp += arr[i].pop();
+                }
+            }
+            result[i] = temp;
+        }
+
+        console.log(result);
+
+    </script>
+</body>
+
+</html>

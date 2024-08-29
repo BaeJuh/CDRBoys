@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input id="row" type="number">
+    <input id="col" type="number">
+    <button id="run">Start sum</button>
+    <div id="target"></div>
+    <script>
+        const test = [
+            [5, 2, 3, 1, 5, 6, 7, 8, 9, 1],
+            [5, 2, 1, 1, 1, 6, 7, 8, 1, 1],
+            [5, 1, 1, 1, 1, 1, 7, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+
+        
+        
+
+        const target = document.getElementById("target");
+        const runButton = document.getElementById("run");
+        runButton.addEventListener("click", () => {
+            target.innerHTML = "";
+            const row = Number(document.getElementById("row").value);
+            const col = Number(document.getElementById("col").value);
+            const matrix = [];
+
+            for (let i = 0; i < row; i++) {
+                matrix[i] = [];
+                for (let j = 0; j < col; j++) {
+                    matrix[i].push(Math.floor(Math.random() * 9 + 1));
+                }
+            }
+            console.log( matrix );
+            matrix.forEach( (arr) => {
+                target.innerHTML += `${arr} <br>`;
+            });
+            target.innerHTML += `물결 합은 ${waveSum(matrix)} `;
+        });
+
+        const waveSum = (matrix) => {
+            const floor = matrix.length;
+            let currentPos = floor - 1; // 초기 위치
+            let isUpping = true;
+            let result = 0;
+
+            for (let j = 0; j < matrix[0].length; j++) { // col
+                if ((currentPos === 0 && isUpping === true) || (currentPos === floor - 1 && isUpping === false)) {
+                    isUpping = !isUpping;
+                }
+                for (let i = 0; i < floor; i++) { // row
+                    if (i >= currentPos) {
+                        result += matrix[i][j];
+                    }
+                }
+                currentPos = isUpping ? currentPos - 1 : currentPos + 1;
+            }
+
+            return result;
+        }
+
+        console.log(waveSum(test));
+    </script>
+</body>
+
+</html>

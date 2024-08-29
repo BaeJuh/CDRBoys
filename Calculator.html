@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+</head>
+
+<body>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <div id="cal"></div>
+    <div id="test"></div>
+    <script>
+        class Calculator {
+            constructor(id) {
+                this.id = id;
+                this.formula = null;
+            }
+
+            controller() {
+                class Deck {
+                    constructor(id) {
+                        this.id = id;
+                        this.storage = [];
+                    }
+                    unshiftData(data) {
+                        this.storage.unshift(data);
+                    }
+                    pushData(data) {
+                        this.storage.push(data);
+                    }
+                    shiftData() {
+                        return this.storage.shift();
+                    }
+                    popData() {
+                        return this.storage.pop();
+                    }
+                    getSize() {
+                        let count = 0;
+                        this.storage.forEach(() => {
+                            count++;
+                        });
+
+                        return count;
+                    }
+                }
+                this.formula = new Deck("formula");
+
+                const mainArea = document.getElementById( `${this.id}` );
+                mainArea.onclick = (e) => {
+                    e = e ? e : event;
+                    const currentInput = e.target.dataset.value;
+                    if (currentInput != null) {
+
+                        if (currentInput === "back") {
+                            this.formula.popData();
+                        }
+                        else if (currentInput === "=") {
+                            let calculateString = "";
+
+                            while (this.formula.getSize() > 0) {
+                                calculateString += this.formula.shiftData();
+                            }
+
+                            let result = this.calculate(calculateString);
+                            for (let i = 0; i < result.length; i++) {
+                                this.formula.pushData(result[i]);
+                            }
+                        }
+                        else if (currentInput === "clear") {
+                            while (this.formula.getSize() > 0) {
+                                this.formula.popData();
+                            }
+                        } else {
+                            this.formula.pushData(currentInput);
+                        }
+
+                        let displayString = "";
+                        const loopCount = this.formula.getSize();
+                        for (let i = 0; i < loopCount; i++) {
+                            const oneNumber = this.formula.shiftData();
+                            displayString += oneNumber;
+                            this.formula.pushData(oneNumber);
+                        }
+
+                        this.displayNumber(displayString);
+                    }
+                }
+            }
+            displayNumber(formulaString) {
+                const numberDisplay = document.getElementById(`${this.id}Result`);
+                console.log( this.id );
+                numberDisplay.innerHTML = formulaString;
+            }
+
+            calculate(resultString) {
+                return String(eval(resultString));
+            }
+
+            initCalculator(targetDom) {
+                const HTMLstruct = `
+                    <div id="${this.id}" class="mainBox">
+                        <div id="${this.id}Result" class="resultArea">0</div>
+                        <button data-value="clear">C</button>
+                        <button data-value="(">(</button>
+                        <button data-value=")">)</button>
+                        <button data-value="back">&gt;</button>    
+                        <button data-value="7">7</button>
+                        <button data-value="8">8</button>
+                        <button data-value="9">9</button>
+                        <button data-value="/">/</button>    
+                        <button data-value="4">4</button>
+                        <button data-value="5">5</button>
+                        <button data-value="6">6</button>
+                        <button data-value="*">X</button>    
+                        <button data-value="1">1</button>
+                        <button data-value="2">2</button>
+                        <button data-value="3">3</button>
+                        <button data-value="-">-</button>    
+                        <button data-value="0">0</button>
+                        <button data-value=".">.</button>
+                        <button data-value="=">=</button> 
+                        <button data-value="+">+</button>    
+                    </div>
+                `;
+                console.log( this.id );
+                const cssStyle = `
+                <style>
+                    .mainBox { 
+                        margin: auto;
+                        margin-top: calc( 50vh - 250px );
+                        width: 300px; height: 500px; padding: 20px; 
+                        border: 1px solid gray; border-radius: 10px;
+                        background-image: url("");
+                    }
+                    .resultArea { 
+                        width: 100%; height: 70px; 
+                        background-color: lightgray;
+                        color: black; font-size: 50px; line-height: 70px;
+                        text-align: right; border-radius: 10px;
+                        margin-bottom: 10px; 
+                    }
+                    button { 
+                        width: 71px; height: 71px; float: left;
+                        border: none; border-radius: 50%;
+                        margin: 2px;
+
+                    }
+                    </style>
+                `;
+
+                targetDom.innerHTML = HTMLstruct + cssStyle;
+            }
+            control(targetDom) {
+                this.initCalculator(targetDom);
+                this.controller();
+            }
+        }
+
+        const calculator = new Calculator('myCal');
+        calculator.control(document.getElementById('cal'));
+    </script>
+</body>
+
+</html>

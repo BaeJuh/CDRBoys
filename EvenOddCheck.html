@@ -4,8 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Number Checker</title>
+
+    <style>
+        canvas {
+            border: 1px solid red;
+        }
+    </style>
 </head>
 <body>
+    <canvas id="canvas" width="300" height="300"></canvas>
+    <br>
     <script>
 
         class NumberChecker {
@@ -49,7 +57,7 @@
                     if ( number % 2 === 0 ) {
                         result.even.insert( number );
                     } else {
-                        result.odd.insert( number )
+                        result.odd.insert( number );
                     }
                 }
 
@@ -57,10 +65,47 @@
             }
 
             displayResult () {
+                const evenCount = this.result.even.getSize();
+                const oddCount = this.result.odd.getSize();
                 document.write(`
-                짝수는 ${this.result.even.getSize()}개 이고,<br>
-                홀수는 ${this.result.odd.getSize()}개 입니다.
-                `)
+                짝수는 ${evenCount}개 이고,<br>
+                홀수는 ${oddCount}개 입니다.
+                `);
+                const canvas = document.getElementById("canvas");
+                const pen = canvas.getContext("2d");
+                
+                const scale = 10;
+
+                const big = evenCount > oddCount ? evenCount : oddCount;
+
+                const printDot = (x, y) => {
+                    pen.fillRect(x + 30, y, 1, 1);
+                }
+                const modiDot = (x, y) => {
+                    printDot( x*scale + 30, canvas.height - y*scale );
+                }
+
+                const grapher = ( x, height ) => {
+                    pen.fillStyle ="blue"
+                    pen.fillRect( x*scale, canvas.height - height*scale, 20, height*scale );
+                }
+                grapher( 10, evenCount );
+                grapher( 20, oddCount );
+                const lineDraw = () => {
+                    pen.fillStyle = "green";
+                    
+                    for (let i=0; i<canvas.width; i+=4) {
+                        printDot( i, canvas.height - big*scale );
+                        printDot( i+1, canvas.height - big*scale );
+                    }
+                }
+                const writeText = ( big ) => {
+                    pen.fillStyle = "black";
+                    pen.font = "20px serif";
+                    pen.fillText(`${big}`, 0, canvas.height - big*scale);
+                }
+                writeText( big );
+                lineDraw();
             }
 
             run( data ) {
@@ -71,7 +116,7 @@
             }
 
         }
-        data = "1687437654186432487432165763165";
+        data = "168741357939763755431856413268432165763165";
 
         const checker = new NumberChecker("chk");
         checker.run( data );

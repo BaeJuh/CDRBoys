@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const scores = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 100, 100];
+
+        class ScoreControl {
+            constructor(id) {
+                this.id = id;
+            }
+            getSum(arr) {
+                let sum = 0;
+                arr.forEach((v) => {
+                    sum += v;
+                });
+                return sum;
+            }
+            getAverage(arr) {
+                return this.getSum(arr) / arr.length;
+            }
+
+            getDiff(arr) {
+                const result = [];
+                const aver = this.getAverage(arr);
+                arr.forEach((v, i) => {
+                    result[i] = arr[i] - aver;
+                });
+                console.log( result );
+                return result;
+            }
+
+            control(arr) {
+                this.getDiff(arr);
+            }
+        }
+
+        const score = new ScoreControl("main");
+        document.write(score.getDiff(scores));
+    </script>
+</body>
+
+</html>
