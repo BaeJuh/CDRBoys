@@ -91,6 +91,7 @@
             }
             displayNodes() {
                 this.storage.getIndex();
+<<<<<<< HEAD
                 //`<div id="${id}" style=" width: 200px; height: 200px; border: 1px solid black;">${val}<div>`;
                 let current = this.storage.head;
                 const target = document.getElementById("targetDoM");
@@ -110,31 +111,46 @@
                         `;
                         
                 }
+=======
+>>>>>>> 80a33fa5c327cb96d6bbc64d9ac469fa3dd75160
             }
         }
 
         const main = (() => {
             const queue = new Queue("queue");
             queue.setStorage();
+<<<<<<< HEAD
             const node1 = new Node("초지");
             const node2 = new Node("고잔");
             const node3 = new Node("중앙");
             const node4 = new Node("한대앞");
             const node5 = new Node("상록수");
+=======
+            const node1 = new Node(1);
+            const node2 = new Node(2);
+            const node3 = new Node(3);
+            const node4 = new Node(4);
+>>>>>>> 80a33fa5c327cb96d6bbc64d9ac469fa3dd75160
 
             queue.push( node1 );
             queue.push( node2 );
             queue.push( node3 );
             queue.push( node4 );
+<<<<<<< HEAD
             queue.push( node5 );
+=======
+>>>>>>> 80a33fa5c327cb96d6bbc64d9ac469fa3dd75160
 
             queue.displayNodes();
             //console.log( queue.shift() );
             //console.log( queue.shift() );
             //console.log( queue.shift() );
             //console.log( queue.shift() );
+<<<<<<< HEAD
             //`<div id="${id}" style=" width: 200px; height: 200px; border: 1px solid black;">${val}<div>`;
             
+=======
+>>>>>>> 80a33fa5c327cb96d6bbc64d9ac469fa3dd75160
         })();
 
     </script>
