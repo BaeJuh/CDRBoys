@@ -12,8 +12,7 @@
     <!--Font-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <!--XEIcon-->
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
 
@@ -88,7 +87,7 @@
             }
 
             controller() {
-                class Dequeue {
+                class Deque {
                     constructor(id) {
                         this.id = id;
                         this.storage = [];
@@ -114,7 +113,7 @@
                         return count;
                     }
                 }
-                const formula = new Dequeue(`${this.id}formula`);
+                const formula = new Deque(`${this.id}formula`);
 
                 const mainArea = document.getElementById(`${this.id}`);
 
@@ -148,9 +147,7 @@
                                 }
 
                                 if (result === "0") {
-                                    console.log(formula.getSize());
                                     formula.popData();
-                                    console.log(formula);
                                 }
                                 break;
                             default:
@@ -162,11 +159,9 @@
                 });
 
             }
-            displayNumber(formula, result) {
+            displayNumber(formula, result) { // Visualize
                 const numberDisplay = document.getElementById(`${this.id}Result`);
-                console.log(document.getElementById(`${this.id}formatNumber`));
                 const formatValue = Number(document.getElementById(`${this.id}formatNumber`).value);
-                console.log(this.id + " : " + formatValue)
                 const formatForm = {
                     format1: 4,
                     format2: 3,
@@ -192,8 +187,6 @@
                             }
                         );
                     }
-
-
                 }
                 else {
                     //displayString = "";
@@ -230,7 +223,6 @@
                 let isGraphOn = false;
 
                 graphButton.addEventListener("click", () => {
-                    console.log(mainArea);
                     isGraphOn = !isGraphOn;
                     graphDrawer.style.display = isGraphOn ? "flex" : "none";
                     mainArea.style.left = isGraphOn ? "calc( 50vw - 750px )" : "calc( 50vw - 150px )";
@@ -249,7 +241,6 @@
                         this.moveX = 0;
                         this.moveY = 0;
                         this.deltaMove = 25;
-                        this.graphTemp = [];
                     }
                     initCanvas() {
                         const graphButton = document.getElementById(`${this.id}GraphButton`);
@@ -268,10 +259,10 @@
                         this.pen.fillStyle = "#1B1A55";
                     }
 
-                    printDot = (x, y) => {
+                    printDot(x, y) {
                         this.pen.fillRect(x, y, 1, 1);
                     }
-                    modiDot = (x, y) => {
+                    modiDot(x, y) {
                         this.printDot(this.canvas.width / 2 + this.moveX + x * this.scale, this.canvas.height / 2 + this.moveY - y * this.scale);
                     }
 
@@ -307,13 +298,13 @@
                             }
                         }
                     }
-                    displayGraph(obj) {
-                        for (const key in obj) {
+                    displayGraph( graphPosition ) {
+                        for (const key in graphPosition) {
                             switch (key) {
                                 case "linear":
                                     // y = a * x + b
                                     this.pen.fillStyle = "red";
-                                    obj[key].forEach((position) => {
+                                    graphPosition[key].forEach((position) => {
                                         const [linearA, linearB] = position;
                                         for (let i = (-(this.canvas.width / 2)); i < this.canvas.width / 2; i += 1 / this.scale) {
                                             const y = linearA * i + linearB;
@@ -325,7 +316,7 @@
                                 case "quadratic":
                                     // y = a * i**2 * b * i + c
                                     this.pen.fillStyle = "blue";
-                                    obj[key].forEach((position) => {
+                                    graphPosition[key].forEach((position) => {
                                         const [quadraticA, quadraticB, quadraticC] = position;
                                         for (let i = (-(this.canvas.width / 2)); i < this.canvas.width / 2; i += 1 / this.scale) {
                                             const y = quadraticA * i ** 2 + quadraticB * i + quadraticC;
@@ -337,7 +328,7 @@
                                 case "cubic":
                                     // y = a * x**3 + b * x**2 + c*x + d
                                     this.pen.fillStyle = "green";
-                                    obj[key].forEach((position) => {
+                                    graphPosition[key].forEach((position) => {
                                         const [cubicA, cubicB, cubicC, cubicD] = position;
                                         for (let i = (-(this.canvas.width / 2)); i < this.canvas.width / 2; i += 1 / this.scale) {
                                             const y = cubicA * i ** 3 + cubicB * i ** 2 + cubicC * i + cubicD
@@ -349,7 +340,7 @@
                                 case "circle":
                                     // cos sin
                                     this.pen.fillStyle = "violet";
-                                    obj[key].forEach((position) => {
+                                    graphPosition[key].forEach((position) => {
                                         const [circleX, circleY, radian] = position;
                                         for (let i = 0; i < 360; i += 1 / this.scale) {
                                             const cos = Math.cos((i * Math.PI) / 180) * radian + circleX;
@@ -1044,7 +1035,7 @@
                     </style>
                 `;
 
-                targetDom.innerHTML = HTMLStruct + CssStruct; //insertAdjacentHTML("afterend", `${HTMLStruct + CssStruct}`);
+                targetDom.innerHTML = HTMLStruct + CssStruct;
             }
             control(targetDom) {
                 this.initCalculator(targetDom);
@@ -1055,9 +1046,6 @@
             }
         }
 
-
-        //const tester = new Calculator("tester");
-        //tester.control(document.getElementById("test"));
         class ShowCalculator {
             constructor(id) {
                 this.id = id;
@@ -1115,7 +1103,6 @@
         const main = (() => {
             const showCalculator = new ShowCalculator("main");
             showCalculator.control( document.getElementById("calculatorsArea") );
-            console.log( showCalculator.storage );
         })();
     </script>
 </body>
